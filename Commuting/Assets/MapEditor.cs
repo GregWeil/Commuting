@@ -22,16 +22,16 @@ public class MapEditor : Editor {
     if (!plane.Raycast(ray, out distance)) return;
 
     map.buildGrid();
-    (int x, int y) = map.WorldToGrid(ray.GetPoint(distance));
-    MapTile tile = map.GetGrid().ContainsKey((x, y)) ? map.GetGrid()[(x, y)] : null;
+    Vector2Int pos = map.WorldToGrid(ray.GetPoint(distance));
+    MapTile tile = map.GetTile(pos);
 
     Handles.color = tile != null ? Color.red : Color.green;
     Handles.DrawPolyLine(
-      map.GridToWorld(x - 0.5f, y - 0.5f),
-      map.GridToWorld(x + 0.5f, y - 0.5f),
-      map.GridToWorld(x + 0.5f, y + 0.5f),
-      map.GridToWorld(x - 0.5f, y + 0.5f),
-      map.GridToWorld(x - 0.5f, y - 0.5f)
+      map.GridToWorld(pos.x - 0.5f, pos.y - 0.5f),
+      map.GridToWorld(pos.x + 0.5f, pos.y - 0.5f),
+      map.GridToWorld(pos.x + 0.5f, pos.y + 0.5f),
+      map.GridToWorld(pos.x - 0.5f, pos.y + 0.5f),
+      map.GridToWorld(pos.x - 0.5f, pos.y - 0.5f)
     );
     SceneView.RepaintAll();
 
@@ -48,7 +48,7 @@ public class MapEditor : Editor {
       } else {
         if (tile != null) GameObject.DestroyImmediate(tile.gameObject);
         if (selectedPrefab != null) {
-          GameObject.Instantiate(selectedPrefab, map.GridToWorld(x, y), Quaternion.identity, map.transform);
+          GameObject.Instantiate(selectedPrefab, map.GridToWorld(pos), Quaternion.identity, map.transform);
         }
       }
     }

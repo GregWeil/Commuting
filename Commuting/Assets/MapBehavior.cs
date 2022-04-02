@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapBehavior : MonoBehaviour {
   public float gridSize;
-  private Dictionary<(int, int), MapTile> grid = new Dictionary<(int, int), MapTile>();
+  private Dictionary<Vector2Int, MapTile> grid = new Dictionary<Vector2Int, MapTile>();
 
   void Start() {
     this.buildGrid();
@@ -20,19 +20,23 @@ public class MapBehavior : MonoBehaviour {
     }
   }
 
-  public Dictionary<(int, int), MapTile> GetGrid() {
-    return this.grid;
+  public MapTile GetTile(Vector2Int position) {
+    return this.grid.ContainsKey(position) ? this.grid[position] : null;
   }
 
-  public (int x, int y) WorldToGrid(Vector3 pos) {
-    return WorldToGrid(pos.x, pos.z);
+  public Vector2Int WorldToGrid(Vector3 position) {
+    return WorldToGrid(position.x, position.z);
   }
 
-  public (int x, int y) WorldToGrid(float x, float z) {
+  public Vector2Int WorldToGrid(float x, float z) {
     Vector3 origin = transform.position;
     int gridX = Mathf.RoundToInt((x - origin.x) / gridSize);
     int gridY = Mathf.RoundToInt((z - origin.z) / gridSize);
-    return (gridX, gridY);
+    return new Vector2Int(gridX, gridY);
+  }
+
+  public Vector3 GridToWorld(Vector2 position) {
+    return GridToWorld(position.x, position.y);
   }
 
   public Vector3 GridToWorld(float x, float y) {
