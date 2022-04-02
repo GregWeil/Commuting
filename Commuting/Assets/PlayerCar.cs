@@ -42,6 +42,7 @@ public class PlayerCar : MonoBehaviour {
       fromPos = -this.to;
     }
     Vector3 target = Vector3.Lerp(map.GridToWorld(pos + fromPos / 2f), map.GridToWorld(pos + toPos / 2f), curve.Evaluate(turnFrac));
+    this.transform.LookAt(target);
     this.transform.position = target;
   }
 
