@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerCar : MonoBehaviour {
   public MapBehavior map;
   public TimingController timing;
+  public float laneOffset;
   public AnimationCurve curve;
+  public float speed;
 
   private int turn;
   private Vector2Int position;
@@ -21,6 +23,7 @@ public class PlayerCar : MonoBehaviour {
 
   void Update() {
     while (timing.GetTurnIndex() > this.turn) {
+      map.GetTile(this.position)?.Invalidate(this.to);
       this.position += this.to;
       this.from = -this.to;
       this.to = GetNextDirection(map.GetTile(this.position), this.from);
@@ -28,22 +31,27 @@ public class PlayerCar : MonoBehaviour {
     }
 
     float turnFrac = timing.GetTurnFrac();
-    if (turnFrac < 0.5f) {
+    if (turnFrac < 0.9f) {
       Vector2Int input = GetInputDirection(map.GetTile(this.position), this.from);
       if (!input.Equals(Vector2Int.zero)) this.to = input;
     }
 
     Vector2 pos = this.position;
-    Vector2 fromPos = this.from;
-    Vector2 toPos = this.to;
+    Vector2 fromLaneOffset = new Vector2(-this.from.y, this.from.x) * laneOffset;
+    Vector2 fromPos = this.from + fromLaneOffset;
+    Vector2 toLaneOffset = new Vector2(this.to.y, -this.to.x) * laneOffset;
+    Vector2 toPos = this.to + toLaneOffset;
+    Vector2 midPos = this.to.Equals(-this.from) ? toLaneOffset : toLaneOffset + fromLaneOffset;
     if (turnFrac < 0.5f) {
-      toPos = -this.from;
+      toPos = 2 * midPos - fromPos;
     } else {
-      fromPos = -this.to;
+      fromPos = 2 * midPos - toPos;
     }
     Vector3 target = Vector3.Lerp(map.GridToWorld(pos + fromPos / 2f), map.GridToWorld(pos + toPos / 2f), curve.Evaluate(turnFrac));
-    this.transform.LookAt(target);
-    this.transform.position = target;
+    float prop = Utilities.GetLerpProp(speed, timing.GetTurnDt(), 60f);
+    Vector3 nextPosition = Vector3.Lerp(this.transform.position, target, prop);
+    this.transform.LookAt(nextPosition);
+    this.transform.position = nextPosition;
   }
 
   static Vector2Int GetInputDirection(MapTile tile, Vector2Int from) {
