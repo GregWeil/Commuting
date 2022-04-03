@@ -54,8 +54,8 @@ public class MapEditor : Editor {
     );
     SceneView.RepaintAll();
 
-    if (Event.current.type == EventType.MouseDown && Event.current.button == 0) {
-      if (Event.current.control) {
+    if (Event.current.type == EventType.MouseDown) {
+      if (Event.current.control && Event.current.button == 0) {
         if (tile != null) {
           Undo.RecordObject(tile.transform, tile.name);
           Undo.RecordObject(tile, tile.name);
@@ -70,7 +70,10 @@ public class MapEditor : Editor {
           PrefabUtility.RecordPrefabInstancePropertyModifications(tile.transform);
           PrefabUtility.RecordPrefabInstancePropertyModifications(tile);
         }
-      } else {
+      } else if (Event.current.control && Event.current.button == 1) {
+        selectedPrefabPath = tile == null ? "" : PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(tile.gameObject);
+        this.Repaint();
+      } else if (Event.current.button == 0) {
         if (tile != null) {
           Undo.DestroyObjectImmediate(tile.gameObject);
         }
