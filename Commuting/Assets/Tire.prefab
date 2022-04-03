@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c727cabbbfa32145a0797365a52f94f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 0.5
+  minDistance: 0.1
 --- !u!120 &6653775411652878924
 LineRenderer:
   m_ObjectHideFlags: 0

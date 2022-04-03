@@ -88,4 +88,28 @@ public class PlayerCar : MonoBehaviour {
     }
     return from;
   }
+
+  Vector3 GetTargetPosition(float turnProp) {
+    Vector2 pos = position;
+    Vector2 fromLaneOffset = new Vector2(-from.y, from.x) * laneOffset;
+    Vector2 fromPos = (from + fromLaneOffset) / 2f;
+    Vector2 toLaneOffset = new Vector2(to.y, -to.x) * laneOffset;
+    Vector2 toPos = (to + toLaneOffset) / 2f;
+
+    if (to.Equals(-from)) {
+      return Vector3.Lerp(map.GridToWorld(pos + fromPos), map.GridToWorld(pos + toPos), turnProp);
+    }
+
+    Vector2 midPos = toLaneOffset + fromLaneOffset;
+    if (!to.Equals(from)) {
+
+    }
+
+    if (turnProp < 0.5f) {
+      toPos = midPos - fromPos / 2f;
+    } else {
+      fromPos = midPos - toPos / 2f;
+    }
+    return Vector3.Lerp(map.GridToWorld(pos + fromPos), map.GridToWorld(pos + toPos), turnProp);
+  }
 }
