@@ -22,4 +22,11 @@ public class MapTile : MonoBehaviour {
     if (Vector2Int.left.Equals(direction)) return this.west;
     return false;
   }
+
+  public void Invalidate(Vector2Int direction) {
+    if (Vector2Int.up.Equals(direction)) this.north = false;
+    if (Vector2Int.down.Equals(direction)) this.south = false;
+    if (Vector2Int.right.Equals(direction)) this.east = false;
+    if (Vector2Int.left.Equals(direction)) this.west = false;
+  }
 }

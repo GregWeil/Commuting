@@ -11,7 +11,9 @@ public class TimingController : MonoBehaviour {
   }
 
   void Update() {
-    this.turn += Time.deltaTime / this.turnDuration;
+    if (this.turnDuration > 0) {
+      this.turn += Time.deltaTime / this.turnDuration;
+    }
   }
 
   public float GetTurn() {
@@ -24,5 +26,10 @@ public class TimingController : MonoBehaviour {
 
   public float GetTurnFrac() {
     return this.GetTurn() - this.GetTurnIndex();
+  }
+
+  public float GetTurnDt() {
+    if (this.turnDuration <= 0) return 0;
+    return Time.deltaTime / this.turnDuration;
   }
 }
