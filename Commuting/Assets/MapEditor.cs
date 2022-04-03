@@ -9,9 +9,17 @@ public class MapEditor : Editor {
   string selectedPrefabPath = "";
 
   public override void OnInspectorGUI() {
-    base.OnInspectorGUI();
-    string[] assets = AssetDatabase.FindAssets("", new[] { "Assets/RoadPieces" })
-        .Select(guid => AssetDatabase.GUIDToAssetPath(guid)).ToArray();
+    MapBehavior map = (MapBehavior)target;
+    float newGridSize = EditorGUILayout.FloatField("Grid Size", map.gridSize);
+    if (newGridSize != map.gridSize && newGridSize != 0) {
+      map.buildGrid();
+      map.gridSize = newGridSize;
+      foreach (Vector2Int cell in map.getGridCoords()) {
+        map.GetTile(cell).transform.position = map.GridToWorld(cell);
+      }
+    }
+
+    string[] assets = getPrefabAssetPaths();
     GUIContent[] content = assets.Select(path => {
       GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
       Texture image = AssetDatabase.GetCachedIcon(path);
@@ -49,21 +57,35 @@ public class MapEditor : Editor {
     if (Event.current.type == EventType.MouseDown && Event.current.button == 0) {
       if (Event.current.control) {
         if (tile != null) {
+          Undo.RecordObject(tile.transform, tile.name);
+          Undo.RecordObject(tile, tile.name);
           tile.transform.Rotate(0f, 90f, 0f);
           bool tmp = tile.north;
           tile.north = tile.west;
           tile.west = tile.south;
           tile.south = tile.east;
           tile.east = tmp;
+          EditorUtility.SetDirty(tile.transform);
+          EditorUtility.SetDirty(tile);
+          PrefabUtility.RecordPrefabInstancePropertyModifications(tile.transform);
+          PrefabUtility.RecordPrefabInstancePropertyModifications(tile);
         }
       } else {
-        if (tile != null) GameObject.DestroyImmediate(tile.gameObject);
+        if (tile != null) {
+          Undo.DestroyObjectImmediate(tile.gameObject);
+        }
         if (selectedPrefabPath != "") {
           GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(selectedPrefabPath);
-          GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(prefab, map.transform);
-          obj.transform.position = map.GridToWorld(pos);
+          GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, map.transform);
+          instance.transform.position = map.GridToWorld(pos);
+          Undo.RegisterCreatedObjectUndo(instance, instance.name);
         }
       }
     }
+  }
+
+  string[] getPrefabAssetPaths() {
+    return AssetDatabase.FindAssets("", new[] { "Assets/RoadPieces" })
+        .Select(guid => AssetDatabase.GUIDToAssetPath(guid)).ToArray();
   }
 }

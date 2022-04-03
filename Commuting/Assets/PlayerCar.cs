@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerCar : MonoBehaviour {
@@ -8,6 +9,7 @@ public class PlayerCar : MonoBehaviour {
   public float laneOffset;
   public AnimationCurve curve;
   public float speed;
+  public GameObject emitter;
 
   private int turn;
   private Vector2Int position;
@@ -17,8 +19,8 @@ public class PlayerCar : MonoBehaviour {
   void Start() {
     this.turn = timing.GetTurnIndex();
     this.position = map.WorldToGrid(transform.position);
-    this.from = Vector2Int.down;
-    this.to = Vector2Int.up;
+    this.to = new Vector2Int(Mathf.RoundToInt(transform.forward.x), Mathf.RoundToInt(transform.forward.z));
+    this.from = -this.to;
   }
 
   void Update() {
@@ -26,7 +28,12 @@ public class PlayerCar : MonoBehaviour {
       map.GetTile(this.position)?.Invalidate(this.to);
       this.position += this.to;
       this.from = -this.to;
-      this.to = GetNextDirection(map.GetTile(this.position), this.from);
+      MapTile tile = map.GetTile(this.position);
+      if (tile != null && !tile.AllowedDirections().Any()) {
+        this.emitter.SetActive(true);
+        this.enabled = false;
+      }
+      this.to = GetNextDirection(tile, this.from);
       this.turn += 1;
     }
 
@@ -36,21 +43,23 @@ public class PlayerCar : MonoBehaviour {
       if (!input.Equals(Vector2Int.zero)) this.to = input;
     }
 
+    float turnProp = this.curve.Evaluate(turnFrac);
     Vector2 pos = this.position;
     Vector2 fromLaneOffset = new Vector2(-this.from.y, this.from.x) * laneOffset;
     Vector2 fromPos = this.from + fromLaneOffset;
     Vector2 toLaneOffset = new Vector2(this.to.y, -this.to.x) * laneOffset;
     Vector2 toPos = this.to + toLaneOffset;
     Vector2 midPos = this.to.Equals(-this.from) ? toLaneOffset : toLaneOffset + fromLaneOffset;
-    if (turnFrac < 0.5f) {
+    if (turnProp < 0.5f) {
       toPos = 2 * midPos - fromPos;
     } else {
       fromPos = 2 * midPos - toPos;
     }
-    Vector3 target = Vector3.Lerp(map.GridToWorld(pos + fromPos / 2f), map.GridToWorld(pos + toPos / 2f), curve.Evaluate(turnFrac));
+    Vector3 target = Vector3.Lerp(map.GridToWorld(pos + fromPos / 2f), map.GridToWorld(pos + toPos / 2f), turnProp);
+
     float prop = Utilities.GetLerpProp(speed, timing.GetTurnDt(), 60f);
     Vector3 nextPosition = Vector3.Lerp(this.transform.position, target, prop);
-    this.transform.LookAt(nextPosition);
+    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(target - transform.position), prop);
     this.transform.position = nextPosition;
   }
 
@@ -66,7 +75,7 @@ public class PlayerCar : MonoBehaviour {
   }
 
   static Vector2Int GetNextDirection(MapTile tile, Vector2Int from) {
-    if (tile == null) return from;
+    if (tile == null) return -from;
     Vector2Int input = GetInputDirection(tile, from);
     if (!input.Equals(Vector2Int.zero)) return input;
 

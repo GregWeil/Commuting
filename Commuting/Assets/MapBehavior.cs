@@ -20,6 +20,10 @@ public class MapBehavior : MonoBehaviour {
     }
   }
 
+  public IEnumerable<Vector2Int> getGridCoords() {
+    return grid.Keys;
+  }
+
   public MapTile GetTile(Vector2Int position) {
     return this.grid.ContainsKey(position) ? this.grid[position] : null;
   }
