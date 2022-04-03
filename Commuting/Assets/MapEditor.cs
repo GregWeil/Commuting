@@ -1,15 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(MapBehavior))]
 public class MapEditor : Editor {
-  GameObject selectedPrefab;
+  string selectedPrefabPath = "";
 
   public override void OnInspectorGUI() {
     base.OnInspectorGUI();
-    selectedPrefab = (GameObject)EditorGUILayout.ObjectField("Tile", selectedPrefab, typeof(GameObject), false);
+    string[] assets = AssetDatabase.FindAssets("", new[] { "Assets/RoadPieces" })
+        .Select(guid => AssetDatabase.GUIDToAssetPath(guid)).ToArray();
+    GUIContent[] content = assets.Select(path => {
+      GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+      Texture image = AssetDatabase.GetCachedIcon(path);
+      return new GUIContent(obj.name, image);
+    }).Concat(new[] { new GUIContent("None") }).ToArray();
+    int index = System.Array.IndexOf(assets, selectedPrefabPath);
+    index = EditorGUILayout.Popup(index < 0 ? content.Length - 1 : index, content);
+    if (index >= 0 && index < assets.Length) selectedPrefabPath = assets[index];
+    else selectedPrefabPath = "";
   }
 
   public void OnSceneGUI() {
@@ -47,8 +58,10 @@ public class MapEditor : Editor {
         }
       } else {
         if (tile != null) GameObject.DestroyImmediate(tile.gameObject);
-        if (selectedPrefab != null) {
-          GameObject.Instantiate(selectedPrefab, map.GridToWorld(pos), Quaternion.identity, map.transform);
+        if (selectedPrefabPath != "") {
+          GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(selectedPrefabPath);
+          GameObject obj = (GameObject)PrefabUtility.InstantiatePrefab(prefab, map.transform);
+          obj.transform.position = map.GridToWorld(pos);
         }
       }
     }
