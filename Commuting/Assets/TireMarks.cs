@@ -5,20 +5,21 @@ using UnityEngine;
 public class TireMarks : MonoBehaviour {
   public float minDistance;
 
-  private Vector3 lastPosition;
+  private int turn;
   private LineRenderer line;
+  private TimingController timing;
 
   void Start() {
     line = GetComponent<LineRenderer>();
-    lastPosition = transform.position;
-    line.SetPositions(new[] { lastPosition });
+    timing = FindObjectOfType<TimingController>();
+    line.SetPositions(new[] { transform.position, transform.position });
   }
 
   void Update() {
+    Vector3 lastPosition = line.GetPosition(line.positionCount - 2);
     if (Vector3.Distance(lastPosition, transform.position) > minDistance) {
-      lastPosition = transform.position;
       line.positionCount += 1;
-      line.SetPosition(line.positionCount - 1, lastPosition);
     }
+    line.SetPosition(line.positionCount - 1, transform.position);
   }
 }
