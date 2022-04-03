@@ -9,6 +9,7 @@ public class PlayerCar : MonoBehaviour {
   public float laneOffset;
   public AnimationCurve curve;
   public float speed;
+  public float turnSpeed;
   public GameObject emitter;
 
   private int turn;
@@ -44,22 +45,13 @@ public class PlayerCar : MonoBehaviour {
     }
 
     float turnProp = this.curve.Evaluate(turnFrac);
-    Vector2 pos = this.position;
-    Vector2 fromLaneOffset = new Vector2(-this.from.y, this.from.x) * laneOffset;
-    Vector2 fromPos = this.from + fromLaneOffset;
-    Vector2 toLaneOffset = new Vector2(this.to.y, -this.to.x) * laneOffset;
-    Vector2 toPos = this.to + toLaneOffset;
-    Vector2 midPos = this.to.Equals(-this.from) ? toLaneOffset : toLaneOffset + fromLaneOffset;
-    if (turnProp < 0.5f) {
-      toPos = 2 * midPos - fromPos;
-    } else {
-      fromPos = 2 * midPos - toPos;
-    }
-    Vector3 target = Vector3.Lerp(map.GridToWorld(pos + fromPos / 2f), map.GridToWorld(pos + toPos / 2f), turnProp);
+    Vector3 target = GetTargetPosition(turnProp);
 
-    float prop = Utilities.GetLerpProp(speed, timing.GetTurnDt(), 60f);
-    Vector3 nextPosition = Vector3.Lerp(this.transform.position, target, prop);
-    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(target - transform.position), prop);
+    Vector3 nextPosition = Vector3.Lerp(this.transform.position, target,
+      Utilities.GetLerpProp(speed, timing.GetTurnDt(), 60f));
+    this.transform.rotation = Quaternion.Lerp(this.transform.rotation,
+      Quaternion.LookRotation(target - transform.position),
+      Utilities.GetLerpProp(turnSpeed, timing.GetTurnDt(), 60f));
     this.transform.position = nextPosition;
   }
 
@@ -100,11 +92,19 @@ public class PlayerCar : MonoBehaviour {
       return Vector3.Lerp(map.GridToWorld(pos + fromPos), map.GridToWorld(pos + toPos), turnProp);
     }
 
-    Vector2 midPos = toLaneOffset + fromLaneOffset;
     if (!to.Equals(from)) {
-
+      Vector2 center = new Vector2(from.x + to.x, from.y + to.y) / 2f;
+      Vector2 fromOffset = fromPos - center;
+      float toRadius = (toPos - center).magnitude;
+      float startAngle = Mathf.Atan2(fromOffset.y, fromOffset.x);
+      float difference = Vector2.SignedAngle(fromOffset, toPos - center);
+      float radius = Mathf.Lerp(fromOffset.magnitude, toRadius, turnProp);
+      float angle = startAngle + Mathf.Deg2Rad * difference * turnProp;
+      Vector2 offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+      return map.GridToWorld(pos + center + offset);
     }
 
+    Vector2 midPos = toLaneOffset + fromLaneOffset;
     if (turnProp < 0.5f) {
       toPos = midPos - fromPos / 2f;
     } else {

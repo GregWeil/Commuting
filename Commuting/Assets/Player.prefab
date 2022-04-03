@@ -77,6 +77,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   speed: 0.1
+  turnSpeed: 0.25
   emitter: {fileID: 1846103942787046947}
 --- !u!1 &1846103942787046947
 GameObject:
@@ -87,6 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1846103942787046946}
+  - component: {fileID: 986608263668617838}
   - component: {fileID: 1846103942787046944}
   - component: {fileID: 1846103942787046945}
   m_Layer: 0
@@ -110,6 +112,102 @@ Transform:
   m_Father: {fileID: 1846103942778552916}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &986608263668617838
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846103942787046947}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: c02278a53d8650842a26428470aedf45, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.8
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!198 &1846103942787046944
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4985,7 +5083,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5033,6 +5131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RearRightTire
       objectReference: {fileID: 0}
+    - target: {fileID: 6653775411652878924, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -5047,7 +5149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.9
+      value: -1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5095,6 +5197,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FrontRightTire
       objectReference: {fileID: 0}
+    - target: {fileID: 6653775411652878924, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -5109,7 +5215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5171,7 +5277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.9
+      value: -1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6653775411652878925, guid: ef2b8b4ed961b3d46b1305160e956162, type: 3}
       propertyPath: m_LocalRotation.w

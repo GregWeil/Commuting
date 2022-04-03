@@ -3962,8 +3962,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1454370631}
-  positionOffset: {x: 0, y: 40, z: -15}
-  lookOffset: {x: 0, y: 10, z: 0}
+  positionOffset: {x: 0, y: 27, z: -10}
+  lookOffset: {x: 0, y: 3, z: 0}
   moveSpeed: 0.1
   turnSpeed: 0.1
 --- !u!82 &963194230
