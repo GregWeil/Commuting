@@ -13,6 +13,7 @@ public class PlayerCar : MonoBehaviour {
   public GameObject emitter;
 
   private int turn;
+  private bool inputLocked;
   private Vector2Int position;
   private Vector2Int from;
   private Vector2Int to;
@@ -26,20 +27,25 @@ public class PlayerCar : MonoBehaviour {
 
   void Update() {
     while (timing.GetTurnIndex() > this.turn) {
-      map.GetTile(this.position)?.Invalidate(this.to);
+      MapTile prevTile = map.GetTile(this.position);
+      if (prevTile != null) {
+        prevTile.SendMessage("OnTileExit", this.to, SendMessageOptions.DontRequireReceiver);
+      }
       this.position += this.to;
       this.from = -this.to;
       MapTile tile = map.GetTile(this.position);
-      if (tile != null && !tile.AllowedDirections().Any()) {
-        this.emitter.SetActive(true);
-        this.enabled = false;
+      if (tile == null) {
+        this.Stop(true);
+      } else {
+        tile.SendMessage("OnTileEnter", this.from, SendMessageOptions.DontRequireReceiver);
+        if (!tile.AllowedDirections().Any()) this.Stop(true);
       }
-      this.to = GetNextDirection(tile, this.from);
+      this.to = GetNextDirection(tile, this.from, this.inputLocked);
       this.turn += 1;
     }
 
     float turnFrac = timing.GetTurnFrac();
-    if (turnFrac < 0.9f) {
+    if (turnFrac < 0.9f && !inputLocked) {
       Vector2Int input = GetInputDirection(map.GetTile(this.position), this.from);
       if (!input.Equals(Vector2Int.zero)) this.to = input;
     }
@@ -66,10 +72,10 @@ public class PlayerCar : MonoBehaviour {
     return Vector2Int.zero;
   }
 
-  static Vector2Int GetNextDirection(MapTile tile, Vector2Int from) {
+  static Vector2Int GetNextDirection(MapTile tile, Vector2Int from, bool inputLocked) {
     if (tile == null) return -from;
     Vector2Int input = GetInputDirection(tile, from);
-    if (!input.Equals(Vector2Int.zero)) return input;
+    if (!input.Equals(Vector2Int.zero) && !inputLocked) return input;
 
     if (tile.Allows(-from)) return -from;
     Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
@@ -111,5 +117,14 @@ public class PlayerCar : MonoBehaviour {
       fromPos = midPos - toPos / 2f;
     }
     return Vector3.Lerp(map.GridToWorld(pos + fromPos), map.GridToWorld(pos + toPos), turnProp);
+  }
+
+  public void Stop(bool crash) {
+    this.emitter.SetActive(crash && !inputLocked);
+    this.enabled = false;
+  }
+
+  public void LockInput() {
+    this.inputLocked = true;
   }
 }

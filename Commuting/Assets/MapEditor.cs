@@ -26,7 +26,7 @@ public class MapEditor : Editor {
       return new GUIContent(obj.name, image);
     }).Concat(new[] { new GUIContent("None") }).ToArray();
     int index = System.Array.IndexOf(assets, selectedPrefabPath);
-    index = EditorGUILayout.Popup(index < 0 ? content.Length - 1 : index, content);
+    index = EditorGUILayout.Popup(new GUIContent("Tile Type"), index < 0 ? content.Length - 1 : index, content);
     if (index >= 0 && index < assets.Length) selectedPrefabPath = assets[index];
     else selectedPrefabPath = "";
   }

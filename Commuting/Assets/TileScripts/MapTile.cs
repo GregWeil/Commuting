@@ -29,4 +29,8 @@ public class MapTile : MonoBehaviour {
     if (Vector2Int.right.Equals(direction)) this.east = false;
     if (Vector2Int.left.Equals(direction)) this.west = false;
   }
+
+  void OnTileExit(Vector2Int direction) {
+    this.Invalidate(direction);
+  }
 }
