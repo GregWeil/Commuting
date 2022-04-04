@@ -25,6 +25,8 @@ public class Timer : MonoBehaviour {
     text = GetComponent<Text>();
     if (Utilities.HasBestScore()) {
       text.text = "Best: " + Utilities.FormatScoreAsTime(startHours, secondsPerTurn, Utilities.GetBestScore());
+    } else {
+      text.text = "";
     }
   }
 
