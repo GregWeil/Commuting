@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TimingController : MonoBehaviour {
   public float turnDuration;
+  public bool paused;
+
   private float turn;
 
   void Start() {
@@ -11,7 +13,7 @@ public class TimingController : MonoBehaviour {
   }
 
   void Update() {
-    if (this.turnDuration > 0) {
+    if (this.turnDuration > 0 && !this.paused) {
       this.turn += Time.deltaTime / this.turnDuration;
     }
   }
@@ -29,7 +31,7 @@ public class TimingController : MonoBehaviour {
   }
 
   public float GetTurnDt() {
-    if (this.turnDuration <= 0) return 0;
+    if (this.turnDuration <= 0 || this.paused) return 0;
     return Time.deltaTime / this.turnDuration;
   }
 }
