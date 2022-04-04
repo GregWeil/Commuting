@@ -22,8 +22,11 @@ public class LoadNextSceneTile : MonoBehaviour {
         if (nextIndex < SceneManager.sceneCountInBuildSettings) {
           SceneManager.LoadScene(nextIndex);
         } else {
-
+          timing.paused = true;
+          Timer timer = FindObjectOfType<Timer>();
+          if (timer != null) timer.SwitchToTally();
         }
+        active = false;
       }
     }
   }

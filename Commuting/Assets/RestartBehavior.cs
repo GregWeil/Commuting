@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 public class RestartBehavior : MonoBehaviour {
   public float delay;
 
+  void Start() {
+    FindObjectOfType<TimingController>().paused = true;
+  }
+
   void Update() {
     delay -= Time.deltaTime;
     if (delay < 0) {
