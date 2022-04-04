@@ -1060,6 +1060,7 @@ GameObject:
   - component: {fileID: 49811507}
   - component: {fileID: 49811506}
   - component: {fileID: 49811505}
+  - component: {fileID: 49811508}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -1612,6 +1613,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &49811508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49811504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de834c5b2f50b6242a84e9804cc93f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 10
 --- !u!4 &50363402 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4017749299944298097, guid: 959a36cdc2489fb46b8ec0be7e502cbe, type: 3}
