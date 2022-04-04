@@ -13,7 +13,6 @@ public class CameraFollow : MonoBehaviour {
 
   void Start() {
     timing = GameObject.FindObjectOfType<TimingController>();
-    transform.position = target.TransformPoint(lookOffset) + positionOffset;
   }
 
   void Update() {

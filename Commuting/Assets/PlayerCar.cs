@@ -64,10 +64,10 @@ public class PlayerCar : MonoBehaviour {
   static Vector2Int GetInputDirection(MapTile tile, Vector2Int from) {
     if (tile == null) return Vector2Int.zero;
     Vector2Int input = Vector2Int.zero;
-    if (Input.GetKey(KeyCode.UpArrow)) input += Vector2Int.up;
-    if (Input.GetKey(KeyCode.DownArrow)) input += Vector2Int.down;
-    if (Input.GetKey(KeyCode.LeftArrow)) input += Vector2Int.left;
-    if (Input.GetKey(KeyCode.RightArrow)) input += Vector2Int.right;
+    if (Input.GetAxis("Horizontal") < 0) input += Vector2Int.left;
+    if (Input.GetAxis("Horizontal") > 0) input += Vector2Int.right;
+    if (Input.GetAxis("Vertical") > 0) input += Vector2Int.up;
+    if (Input.GetAxis("Vertical") < 0) input += Vector2Int.down;
     if (!input.Equals(from) && tile.Allows(input)) return input;
     return Vector2Int.zero;
   }
@@ -120,7 +120,9 @@ public class PlayerCar : MonoBehaviour {
   }
 
   public void Stop(bool crash) {
-    this.emitter.SetActive(crash && !inputLocked);
+    if (crash && !inputLocked) {
+      this.emitter.SetActive(true);
+    }
     this.enabled = false;
   }
 
