@@ -17,6 +17,7 @@ public class LoadNextSceneTile : MonoBehaviour {
     if (active) {
       delay -= timing.GetTurnDt();
       if (delay < 0) {
+        Utilities.RecordScore(timing.GetTurn());
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
       }
     }

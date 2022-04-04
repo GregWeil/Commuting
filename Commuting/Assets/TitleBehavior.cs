@@ -7,6 +7,10 @@ public class TitleBehavior : MonoBehaviour {
 
   private bool moving;
 
+  void Awake() {
+    Utilities.ClearCurrentScore();
+  }
+
   void Start() {
     TimingController timing = FindObjectOfType<TimingController>();
     timing.paused = true;
