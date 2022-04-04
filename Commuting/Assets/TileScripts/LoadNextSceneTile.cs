@@ -18,7 +18,12 @@ public class LoadNextSceneTile : MonoBehaviour {
       delay -= timing.GetTurnDt();
       if (delay < 0) {
         Utilities.RecordScore(timing.GetTurn());
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextIndex < SceneManager.sceneCountInBuildSettings) {
+          SceneManager.LoadScene(nextIndex);
+        } else {
+
+        }
       }
     }
   }
