@@ -14,6 +14,9 @@ public class LevelCompleteBehavior : MonoBehaviour {
   }
 
   void Update() {
+    if (Input.GetKeyUp(KeyCode.Escape)) {
+      SceneManager.LoadScene(0);
+    }
     if (active) {
       delay -= timing.GetTurnDt();
       if (delay < 0) {

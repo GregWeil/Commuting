@@ -18,6 +18,9 @@ public class TitleBehavior : MonoBehaviour {
 
   void Update() {
     if (!this.moving) {
+      if (Input.GetKeyDown(KeyCode.Escape) && Application.platform != RuntimePlatform.WebGLPlayer) {
+        Application.Quit();
+      }
       if (Input.GetButtonDown("Action")) {
         this.moving = true;
         TimingController timing = FindObjectOfType<TimingController>();
