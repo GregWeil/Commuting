@@ -5,13 +5,13 @@ using UnityEngine;
 public class KillTile : MonoBehaviour {
   void OnTileEnter() {
     foreach (PlayerCar player in FindObjectsOfType<PlayerCar>()) {
-      //player.Crash();
+      player.Stop(true);
     }
   }
 
   void OnTileExit() {
     foreach (PlayerCar player in FindObjectsOfType<PlayerCar>()) {
-      player.Stop(true);
+      //player.Stop(true);
     }
   }
 }
