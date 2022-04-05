@@ -15437,6 +15437,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1846103943328465093, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: delay
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846103943328465093, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: startDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028366542247867245, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: delay
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028366542247867245, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: startDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028366542846641919, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: delay
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028366542846641919, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: startDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028366542895610650, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: delay
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028366542895610650, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
+      propertyPath: startDistance
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba68dc4c85f5f8a4fb47a215177b0a91, type: 3}
 --- !u!4 &757468713 stripped

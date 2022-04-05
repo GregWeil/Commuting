@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minDistance: 0.5
+  startDistance: 50
+  delay: 1
 --- !u!120 &6653775411652878924
 LineRenderer:
   m_ObjectHideFlags: 0
